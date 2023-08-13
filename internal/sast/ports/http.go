@@ -4,13 +4,15 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/nikodem-kirsz/sast-rest-service/internal/sast/app"
 )
 
 type HttpServer struct {
+	app app.Application
 }
 
-func NewHttpServer() HttpServer {
-	return HttpServer{}
+func NewHttpServer(app app.Application) HttpServer {
+	return HttpServer{app}
 }
 
 func (h HttpServer) GetSastReports(w http.ResponseWriter, r *http.Request) {

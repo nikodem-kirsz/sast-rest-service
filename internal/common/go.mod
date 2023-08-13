@@ -1,4 +1,4 @@
-module github.com/nikodem-kirsz/sast-service/internal/common
+module github.com/nikodem-kirsz/sast-rest-service/internal/common
 
 go 1.20
 

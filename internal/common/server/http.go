@@ -22,7 +22,7 @@ func RunHTTPServerOnAddr(addr string, createHandler func(router chi.Router) http
 	// we are mounting all APIs under /api path
 	rootRouter.Mount("/api", createHandler(apiRouter))
 
-	logrus.Info("Starting HTTP server")
+	logrus.Info("Starting HTTP server on port:" + os.Getenv("PORT"))
 
 	err := http.ListenAndServe(addr, rootRouter)
 
