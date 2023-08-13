@@ -30,6 +30,5 @@ func NewApplication(repository Repository) *Application {
 
 type Commands struct {
 }
-
 type Queries struct {
 }
