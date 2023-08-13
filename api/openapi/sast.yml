@@ -1,0 +1,211 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Static Application Security Testing
+  description: REST API to manage SAST data
+  contact:
+    name: Nikodem Kirsz
+    url: github.com/nikodem-kirsz/
+servers:
+    - url: https://{hostname}/api
+      variables:
+        hostname:
+          default: localhost
+security:
+    - bearerAuth: []
+paths:
+    /sast-reports:
+      get:
+        operationId: getSastReports
+        responses:
+          '200':
+            description: Success getting reports from api
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/SastReports'
+          default:
+            description: Unexpected error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+      post:
+        operationId: createSastReport
+        requestBody:
+          description: creating Sast Report payload
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSastReport'
+        responses:
+          '201':
+            description: Success creating SAST report
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/SastReport'
+          default:
+            description: Unexpected error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'        
+    /sast-reports/${reportUUID}:
+      get:
+        operationId: getReport
+        parameters:
+          - in: path
+            name: reportUUID
+            schema:
+              type: string
+              format: uuid
+            required: true
+            description: gets SAST report
+        responses:
+          '200':
+            description: Getting SAST report
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/SastReport'
+          default:
+            description: Unexpected error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+      delete:
+        operationId: deleteReport
+        parameters:
+          - in: path
+            name: reportUUID
+            schema:
+              type: string
+              format: uuid
+            required: true
+            description: delete SAST report
+        responses:
+          '200':
+            description: Deleting SAST report
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/SastReport'
+          default:
+            description: Unexpected error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'               
+      put:
+        operationId: updateReport
+        requestBody:
+          description: updating Sast Report payload
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateSastReport'
+        parameters:
+          - in: path
+            name: reportUUID
+            schema:
+              type: string
+              format: uuid
+            required: true
+            description: updates SAST report
+        responses:
+          '204':
+            description: Updating SAST report
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/SastReport'
+          default:
+            description: Unexpected error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+components:
+  securitySchemas:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    SastReport:
+      type: object
+      required: [uuid, name, description, time, reportContent]
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "sast-initial-testing-1.0"
+        description:
+          type: string
+          example: "Initial security report" 
+        time:
+          type: string
+          format: date-time
+        reportContent:
+          type: string
+    SastReports:
+      type: object
+      required: [sastreports]
+      properties:
+        sastreports:
+          type: array
+          items:
+            $ref: '#/components/schemas/SastReport'  
+    CreateSastReport:
+      type: object
+      required: [uuid, name, description, time, reportContent]
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "sast-initial-testing-1.0"
+        description:
+          type: string
+          example: "Initial security report" 
+        time:
+          type: string
+          format: date-time
+        reportContent:
+          type: string       
+    UpdateSastReport:
+      type: object
+      required: []
+      properties:
+        name:
+          type: string
+          example: "sast-initial-testing-1.0"
+        description:
+          type: string
+          example: "Initial security report" 
+        time:
+          type: string
+          format: date-time
+        reportContent:
+          type: string 
+    Error:
+      type: object
+      required:
+        - slug
+        - message
+      properties:
+        slug:
+          type: string
+        message:
+          type: string                                                         
