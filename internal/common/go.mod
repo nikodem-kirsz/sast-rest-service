@@ -5,6 +5,17 @@ go 1.20
 require (
 	github.com/deepmap/oapi-codegen v1.13.4
 	github.com/go-chi/chi/v5 v5.0.10
+	github.com/go-chi/render v1.0.3
+	github.com/x-cray/logrus-prefixed-formatter v0.5.2
+)
+
+require (
+	github.com/ajg/form v1.5.1 // indirect
+	github.com/google/go-cmp v0.5.9 // indirect
+	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
+	github.com/onsi/ginkgo v1.16.5 // indirect
+	github.com/onsi/gomega v1.27.10 // indirect
+	golang.org/x/term v0.10.0 // indirect
 )
 
 require (

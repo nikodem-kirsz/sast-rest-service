@@ -19,16 +19,16 @@ type Repository interface {
 	GetAllReports(ctx context.Context) ([]query.Report, error)
 }
 type Application struct {
-	repository *Repository
+	// repository *Repository
+	Queries Queries
 }
 
-func NewApplication(repository Repository) *Application {
-	return &Application{
-		repository: &repository,
-	}
-}
+// func NewApplication(repository Repository) *Application {
+// 	return &Application{
+// 		repository: &repository,
+// 	}
+// }
 
-type Commands struct {
-}
 type Queries struct {
+	AllReports query.AllReportsHandler
 }

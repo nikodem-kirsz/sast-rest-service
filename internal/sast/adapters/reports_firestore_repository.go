@@ -2,6 +2,7 @@ package adapters
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"cloud.google.com/go/firestore"
@@ -136,6 +137,8 @@ func (r ReportsFireStoreRepository) GetAllReports(ctx context.Context) ([]query.
 		Query
 
 	iter := query.Documents(ctx)
+
+	fmt.Println("Inside GetAllReports repository method")
 
 	return r.reportModelsToQuery(iter)
 }

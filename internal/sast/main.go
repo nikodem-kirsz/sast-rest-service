@@ -16,6 +16,6 @@ func main() {
 	app := service.NewApplication(ctx)
 
 	server.RunHTTPServer(func(router chi.Router) http.Handler {
-		return ports.HandlerFromMux(ports.NewHttpServer(*app), router)
+		return ports.HandlerFromMux(ports.NewHttpServer(app), router)
 	})
 }

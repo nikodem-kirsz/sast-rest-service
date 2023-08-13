@@ -7,9 +7,11 @@ import (
 	"cloud.google.com/go/firestore"
 	"github.com/nikodem-kirsz/sast-rest-service/internal/sast/adapters"
 	"github.com/nikodem-kirsz/sast-rest-service/internal/sast/app"
+	"github.com/nikodem-kirsz/sast-rest-service/internal/sast/app/query"
+	"github.com/sirupsen/logrus"
 )
 
-func NewApplication(ctx context.Context) *app.Application {
+func NewApplication(ctx context.Context) app.Application {
 	client, err := firestore.NewClient(ctx, os.Getenv("GCP_PROJECT"))
 	if err != nil {
 		panic(err)
@@ -17,8 +19,11 @@ func NewApplication(ctx context.Context) *app.Application {
 
 	reportsRepository := adapters.NewReportsFireStoreRepository(client)
 
-	// logger := logrus.NewEntry(logrus.StandardLogger())
-	// metricsClient := metrics.noOp{}
+	logger := logrus.NewEntry(logrus.StandardLogger())
 
-	return app.NewApplication(reportsRepository)
+	return app.Application{
+		Queries: app.Queries{
+			AllReports: query.NewAllReportsHandler(reportsRepository, logger),
+		},
+	}
 }
