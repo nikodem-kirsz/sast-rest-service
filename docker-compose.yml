@@ -1,0 +1,40 @@
+version: '1.0'
+name: 'sast-rest-service'
+services:
+  sast-http:
+    build:
+      context: docker/app
+    volumes:
+      - ./internal:/internal
+      - ./.go/pkg:/go/pkg
+      - ./.go-cache:/go-cache
+    working_dir: /internal/sast
+    ports:
+      - "127.0.0.1:3000:$PORT"
+    env_file:
+      - .env
+    environment:
+      SERVER_TO_RUN: http
+      GOCACHE: /go-cache
+    depends_on:
+      - firestore
+
+  firestore:
+    build:
+      context: docker/firestore-emulator
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:8787:8787"
+      - "127.0.0.1:4000:4000"
+    restart: unless-stopped
+
+  mysql:
+    image: mariadb:10
+    env_file:
+      - .env
+    volumes:
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - "127.0.0.1:3306:3306"
+    restart: unless-stopped

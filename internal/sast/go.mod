@@ -6,7 +6,6 @@ require (
 	cloud.google.com/go/firestore v1.12.0
 	github.com/deepmap/oapi-codegen v1.13.4
 	github.com/go-chi/chi/v5 v5.0.10
-	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/nikodem-kirsz/sast-rest-service/internal/common v0.0.0-20230814092206-3f6855fa5433
 	github.com/pkg/errors v0.9.1
@@ -77,3 +76,5 @@ require (
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/nikodem-kirsz/sast-rest-service/internal/common => ../common/
