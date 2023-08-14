@@ -1,7 +1,6 @@
 package ports
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/render"
@@ -30,9 +29,8 @@ func (h HttpServer) GetSastReports(w http.ResponseWriter, r *http.Request) {
 	reports := appReportsToResponse(appReports)
 	reportsResp := SastReports{reports}
 
-	fmt.Println("Inside GetSastReports")
-	fmt.Println("Reportsresp", reportsResp)
 	render.Respond(w, r, reportsResp)
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h HttpServer) CreateSastReport(w http.ResponseWriter, r *http.Request) {
@@ -57,8 +55,7 @@ func (h HttpServer) CreateSastReport(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("content-location", "/sast-reports/"+cmd.UUID)
-	fmt.Println("Inside CreateSastReports")
-	w.WriteHeader(http.StatusNoContent)
+	w.WriteHeader(http.StatusCreated)
 }
 
 func (h HttpServer) DeleteReport(w http.ResponseWriter, r *http.Request, reportUUID uuid.UUID) {
@@ -70,7 +67,6 @@ func (h HttpServer) DeleteReport(w http.ResponseWriter, r *http.Request, reportU
 		return
 	}
 	w.Header().Set("content-location", "/sast-reports/"+reportUUID.String())
-	fmt.Println("Inside DeletSastReports")
 	w.WriteHeader(http.StatusNoContent)
 }
 
@@ -92,8 +88,8 @@ func (h HttpServer) GetReport(w http.ResponseWriter, r *http.Request, reportUUID
 		ReportContent: report.ReportContent,
 	}
 	w.Header().Set("content-location", "/sast-reports/"+reportUUID.String())
-	fmt.Println("Inside GetReport")
 	render.Respond(w, r, reportResp)
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h HttpServer) UpdateReport(w http.ResponseWriter, r *http.Request, reportUUID uuid.UUID) {
@@ -117,8 +113,7 @@ func (h HttpServer) UpdateReport(w http.ResponseWriter, r *http.Request, reportU
 	}
 
 	w.Header().Set("content-location", "/sast-reports/"+reportUUID.String())
-	fmt.Println("Inside UpdateSastReports")
-	w.WriteHeader(http.StatusNoContent)
+	w.WriteHeader(http.StatusOK)
 }
 
 func appReportsToResponse(appReports []query.Report) []SastReport {
