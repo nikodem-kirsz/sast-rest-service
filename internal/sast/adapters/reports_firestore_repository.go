@@ -36,7 +36,7 @@ func (r ReportsFireStoreRepository) reportsCollection() *firestore.CollectionRef
 	return r.firestoreClient.Collection("reports")
 }
 
-func (r ReportsFireStoreRepository) AddReport(ctx context.Context, re *report.Report) error {
+func (r ReportsFireStoreRepository) CreateReport(ctx context.Context, re *report.Report) error {
 	collection := r.reportsCollection()
 
 	reportModel := r.marshalReport(re)
@@ -46,19 +46,27 @@ func (r ReportsFireStoreRepository) AddReport(ctx context.Context, re *report.Re
 	})
 }
 
-func (r ReportsFireStoreRepository) GetReport(ctx context.Context, reportUUID string) (*report.Report, error) {
+func (r ReportsFireStoreRepository) GetReport(ctx context.Context, reportUUID string) (query.Report, error) {
 	firestoreReport, err := r.reportsCollection().Doc(reportUUID).Get(ctx)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "unable to get actual docs")
+		return query.Report{}, errors.Wrap(err, "unable to get actual docs")
 	}
 
 	re, err := r.unmarshalReport(firestoreReport)
 	if err != nil {
-		return nil, err
+		return query.Report{}, err
 	}
 
-	return re, nil
+	queryReport := query.Report{
+		UUID:          re.UUID(),
+		Name:          re.Name(),
+		Description:   re.Description(),
+		Time:          re.Time(),
+		ReportContent: re.ReportContent(),
+	}
+
+	return queryReport, nil
 }
 
 func (r ReportsFireStoreRepository) DeleteReport(ctx context.Context, reportUUID string) error {
@@ -71,35 +79,15 @@ func (r ReportsFireStoreRepository) DeleteReport(ctx context.Context, reportUUID
 	return r.firestoreClient.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		return tx.Delete(firestoreReport.Ref)
 	})
-
 }
 
 func (r ReportsFireStoreRepository) UpdateReport(
 	ctx context.Context,
-	reportUUID string,
-	updateFn func(ctx context.Context, re *report.Report) (*report.Report, error),
+	updatedReport *report.Report,
 ) error {
-	reportsCollection := r.reportsCollection()
-
+	collection := r.reportsCollection()
 	return r.firestoreClient.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
-		documentRef := reportsCollection.Doc(reportUUID)
-
-		firestoreReport, err := tx.Get(documentRef)
-		if err != nil {
-			return errors.Wrap(err, "unable to get actual docs")
-		}
-
-		tr, err := r.unmarshalReport(firestoreReport)
-		if err != nil {
-			return err
-		}
-
-		updatedReport, err := updateFn(ctx, tr)
-		if err != nil {
-			return err
-		}
-
-		return tx.Set(documentRef, r.marshalReport(updatedReport))
+		return tx.Set(collection.Doc(updatedReport.UUID()), r.marshalReport(updatedReport))
 	})
 }
 

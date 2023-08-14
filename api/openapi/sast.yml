@@ -53,7 +53,7 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/Error'        
-    /sast-reports/${reportUUID}:
+    /sast-reports/{reportUUID}:
       get:
         operationId: getReport
         parameters:
@@ -89,7 +89,7 @@ paths:
             required: true
             description: delete SAST report
         responses:
-          '200':
+          '202':
             description: Deleting SAST report
             required: true
             content:

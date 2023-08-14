@@ -1,6 +1,8 @@
 package query
 
-import "time"
+import (
+	"time"
+)
 
 type Report struct {
 	UUID          string

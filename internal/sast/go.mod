@@ -6,13 +6,20 @@ require (
 	cloud.google.com/go/firestore v1.12.0
 	github.com/deepmap/oapi-codegen v1.13.4
 	github.com/go-chi/chi/v5 v5.0.10
+	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/google/uuid v1.3.0
-	github.com/nikodem-kirsz/sast-rest-service/internal/common v0.0.0-20230813182355-c931eaa6f339
+	github.com/nikodem-kirsz/sast-rest-service/internal/common v0.0.0-20230814092206-3f6855fa5433
 	github.com/pkg/errors v0.9.1
 	google.golang.org/api v0.126.0
 )
 
-require github.com/ajg/form v1.5.1 // indirect
+require (
+	github.com/ajg/form v1.5.1 // indirect
+	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
+	github.com/nxadm/tail v1.4.8 // indirect
+	github.com/x-cray/logrus-prefixed-formatter v0.5.2 // indirect
+	golang.org/x/term v0.10.0 // indirect
+)
 
 require (
 	cloud.google.com/go v0.110.2 // indirect
@@ -47,7 +54,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.9 // indirect
-	github.com/sirupsen/logrus v1.9.3 // indirect
+	github.com/sirupsen/logrus v1.9.3
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect

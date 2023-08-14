@@ -22,13 +22,13 @@ type ServerInterface interface {
 	// (POST /sast-reports)
 	CreateSastReport(w http.ResponseWriter, r *http.Request)
 
-	// (DELETE /sast-reports/${reportUUID})
+	// (DELETE /sast-reports/{reportUUID})
 	DeleteReport(w http.ResponseWriter, r *http.Request, reportUUID openapi_types.UUID)
 
-	// (GET /sast-reports/${reportUUID})
+	// (GET /sast-reports/{reportUUID})
 	GetReport(w http.ResponseWriter, r *http.Request, reportUUID openapi_types.UUID)
 
-	// (PUT /sast-reports/${reportUUID})
+	// (PUT /sast-reports/{reportUUID})
 	UpdateReport(w http.ResponseWriter, r *http.Request, reportUUID openapi_types.UUID)
 }
 
@@ -46,17 +46,17 @@ func (_ Unimplemented) CreateSastReport(w http.ResponseWriter, r *http.Request) 
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-// (DELETE /sast-reports/${reportUUID})
+// (DELETE /sast-reports/{reportUUID})
 func (_ Unimplemented) DeleteReport(w http.ResponseWriter, r *http.Request, reportUUID openapi_types.UUID) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-// (GET /sast-reports/${reportUUID})
+// (GET /sast-reports/{reportUUID})
 func (_ Unimplemented) GetReport(w http.ResponseWriter, r *http.Request, reportUUID openapi_types.UUID) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-// (PUT /sast-reports/${reportUUID})
+// (PUT /sast-reports/{reportUUID})
 func (_ Unimplemented) UpdateReport(w http.ResponseWriter, r *http.Request, reportUUID openapi_types.UUID) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
@@ -308,13 +308,13 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 		r.Post(options.BaseURL+"/sast-reports", wrapper.CreateSastReport)
 	})
 	r.Group(func(r chi.Router) {
-		r.Delete(options.BaseURL+"/sast-reports/${reportUUID}", wrapper.DeleteReport)
+		r.Delete(options.BaseURL+"/sast-reports/{reportUUID}", wrapper.DeleteReport)
 	})
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/sast-reports/${reportUUID}", wrapper.GetReport)
+		r.Get(options.BaseURL+"/sast-reports/{reportUUID}", wrapper.GetReport)
 	})
 	r.Group(func(r chi.Router) {
-		r.Put(options.BaseURL+"/sast-reports/${reportUUID}", wrapper.UpdateReport)
+		r.Put(options.BaseURL+"/sast-reports/{reportUUID}", wrapper.UpdateReport)
 	})
 
 	return r

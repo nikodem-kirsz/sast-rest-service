@@ -277,7 +277,7 @@ func NewDeleteReportRequest(server string, reportUUID openapi_types.UUID) (*http
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/sast-reports/$%s", pathParam0)
+	operationPath := fmt.Sprintf("/sast-reports/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -311,7 +311,7 @@ func NewGetReportRequest(server string, reportUUID openapi_types.UUID) (*http.Re
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/sast-reports/$%s", pathParam0)
+	operationPath := fmt.Sprintf("/sast-reports/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -356,7 +356,7 @@ func NewUpdateReportRequestWithBody(server string, reportUUID openapi_types.UUID
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/sast-reports/$%s", pathParam0)
+	operationPath := fmt.Sprintf("/sast-reports/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -488,7 +488,7 @@ func (r CreateSastReportResponse) StatusCode() int {
 type DeleteReportResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *SastReport
+	JSON202      *SastReport
 	JSONDefault  *Error
 }
 
@@ -695,12 +695,12 @@ func ParseDeleteReportResponse(rsp *http.Response) (*DeleteReportResponse, error
 	}
 
 	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 202:
 		var dest SastReport
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
-		response.JSON200 = &dest
+		response.JSON202 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
 		var dest Error

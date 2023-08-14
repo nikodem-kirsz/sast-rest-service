@@ -7,7 +7,9 @@ import (
 	"cloud.google.com/go/firestore"
 	"github.com/nikodem-kirsz/sast-rest-service/internal/sast/adapters"
 	"github.com/nikodem-kirsz/sast-rest-service/internal/sast/app"
+	"github.com/nikodem-kirsz/sast-rest-service/internal/sast/app/command"
 	"github.com/nikodem-kirsz/sast-rest-service/internal/sast/app/query"
+
 	"github.com/sirupsen/logrus"
 )
 
@@ -24,6 +26,12 @@ func NewApplication(ctx context.Context) app.Application {
 	return app.Application{
 		Queries: app.Queries{
 			AllReports: query.NewAllReportsHandler(reportsRepository, logger),
+			GetReport:  query.NewGetReportHandler(reportsRepository, logger),
+		},
+		Commands: app.Commands{
+			CreateReport: command.NewCreateReportHandler(reportsRepository, logger),
+			UpdateReport: command.NewUpdateReportHandler(reportsRepository, logger),
+			DeleteReport: command.NewDeleteReportHandler(reportsRepository, logger),
 		},
 	}
 }
