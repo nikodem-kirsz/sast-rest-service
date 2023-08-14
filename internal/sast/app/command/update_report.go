@@ -2,7 +2,6 @@ package command
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/nikodem-kirsz/sast-rest-service/internal/common/decorator"
@@ -39,12 +38,9 @@ func NewUpdateReportHandler(
 }
 
 func (h updateReportHandler) Handle(ctx context.Context, cmd UpdateReport) (err error) {
-	fmt.Printf("PUPAAAAAAAAAAAAAAAAAAAAA", cmd)
 	defer func() {
 		logs.LogCommandExecution("UpdateReport", cmd, err)
 	}()
-
-	fmt.Printf("Inside updates handle", cmd)
 
 	re, err := report.NewReport(cmd.UUID, cmd.Name, cmd.Description, cmd.Time, cmd.ReportContent)
 	if err := h.repo.UpdateReport(ctx, re); err != nil {

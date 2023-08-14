@@ -98,12 +98,10 @@ func (h HttpServer) GetReport(w http.ResponseWriter, r *http.Request, reportUUID
 
 func (h HttpServer) UpdateReport(w http.ResponseWriter, r *http.Request, reportUUID uuid.UUID) {
 	updateReport := UpdateSastReport{}
-	fmt.Printf("INside UpdateReport")
 	if err := render.Decode(r, &updateReport); err != nil {
 		httperr.BadRequest("invalid-request", err, w, r)
 		return
 	}
-	fmt.Printf("INside UpdateReport after decoding", updateReport)
 
 	cmd := command.UpdateReport{
 		UUID:          reportUUID.String(),
@@ -112,7 +110,6 @@ func (h HttpServer) UpdateReport(w http.ResponseWriter, r *http.Request, reportU
 		Time:          *updateReport.Time,
 		ReportContent: *updateReport.ReportContent,
 	}
-	fmt.Printf("Command to be handled", cmd)
 	err := h.app.Commands.UpdateReport.Handle(r.Context(), cmd)
 	if err != nil {
 		httperr.RespondWithSlugError(err, w, r)
