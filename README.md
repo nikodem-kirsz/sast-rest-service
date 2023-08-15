@@ -19,8 +19,8 @@ Application uses this technique for HTTP Server's methods implementation(GET, PO
 - [api](api/) OpenAPI definitions
 - [docker](docker/) Dockerfiles
 - [internal](internal/) Application code
-    - [common](common/) Commonly used tools across sast service,        decorators,logging, errors, http server
-    - [sast](sast/) SAST Service code
+    - [common](internal/common/) Commonly used tools across sast service, decorators, logging, errors, http server
+    - [sast](internal/sast/) SAST Service code
 - [scripts](scripts/) development scripts
 
 ### Running locally
@@ -84,3 +84,73 @@ Docker deamon has to be running in the background. It exposes HTTP port 3000 for
 
 
 ![Architecture](/arch.jpg)
+
+### HTTP Server
+For setting up a HTTP Server chi package was used.
+[https://github.com/go-chi/chi](https://github.com/go-chi/chi)
+
+chi is a lightweight, idiomatic and composable router for building Go HTTP services. It's especially good at helping you write large REST API services that are kept maintainable as your project grows and changes
+It's lightweight, fast, compatible with internal net/http and middlewares packages
+Even though just a simple net/http HTTP server would work I decided to use it instead due to the simplicity and overal readability of chi provided server and middlewares. In terms of scalability is also a good choice and makes it extremely easily to adapt new endpoints & middlewares with DRY concept in mind.
+
+### OpenAPI Spec
+When designing API it's a must to make it as much maintainable, compatible and scalable as possible as it may change over time quite often.
+OpenApi solves all these issues with declarative way. Whole REST API / CRUD methods along with query parameters, payloads, responses are defined in a single yaml file which is used a reference to oapi-codegen tool to generate typings and api high order functions enriching the end router methods with data described in openapi.
+It serves also as a synchronization between backend and frontend(client& types ) so when designing frontend app consuming data from these endpoints the contract is well established.
+
+```shell
+oapi-codegen -generate types -o "$output_dir/openapi_types.gen.go" -package "$package" "api/openapi/$service.yml"
+
+oapi-codegen -generate chi-server -o "$output_dir/openapi_api.gen.go" -package "$package" "api/openapi/$service.yml"
+
+oapi-codegen -generate types -o "internal/common/client/$service/openapi_types.gen.go" -package "$service" "api/openapi/$service.yml"
+
+oapi-codegen -generate client -o "internal/common/client/$service/openapi_client_gen.go" -package "$service" "api/openapi/$service.yml"
+
+```
+
+### Service
+Service provides constructor for application that sets up repository based on a desired database choice
+
+```shell
+PORT=3000
+
+FIRESTORE_EMULATOR_HOST=firestore:8787
+
+DB=FIRESTORE
+
+MYSQL_HOST=mysql
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=password
+MYSQL_DATABASE=sast_database
+```
+Depending on DB env var we can define which database to use(Relational(MySQL) vs NonRational(Firebase))
+
+```shell
+DB=FIRESTORE or DB=MYSQL
+```
+Service establishes connection with one of the databases running on seperate containers under same network
+defined in docker-compose.yml and sets up proper repository that will be used be the application as separator between service logic and database logic making it easy to adapt to any other storing management system.
+#### Command Query Responsibility Segregation(CQRS)
+
+To even more abstract business logic custom operations are embedded in more idiomatic way to be used as repostiory invokation methods. Queries for reading from database, Commands for mutating it's state.
+```go
+type Queries struct {
+	AllReports query.AllReportsHandler
+	GetReport  query.GetReportHandler
+}
+
+type Commands struct {
+	CreateReport command.CreateReportHandler
+	DeleteReport command.DeleteReportHandler
+	UpdateReport command.UpdateReportHandler
+}
+```
+
+### Architectural Concepts
+The application purpose is quite straight forward. There is an HTTP exposing REST endpoints that do some manipulation on the database so why the solution seems so deem in complexity.
+There are diffrent ways of handling any project with business perspective in mind. It could obviously be done with the less effort focusing only on reaching the primary goal and abstracting database from internal logic. It gives a great boost in terms of a delivery time but then slows down once a further development is needed to acquire much higher objective.
+Once considering scalability, maintanance endurance and reliability its great to have it all well organised and created according to for example DDD princpiles it follows on DRY concept too. Even from the perspective of a developer unaware of the project the adaptation time is low and such person can become effective in evolving the project fast due to high readability and intuition standing behind such code.
+So alternative solution would be even omit OpenApi, CQRS and focus primarly on abstracting model in a repository pattern. It would produce less code, simpler data flow and would produce same behaviour in lesser time but would be way more vulnerable for scalling refactoring and scalling. 
+There are trade offs that must be considered before and during the development of any project and in this particural case I wanted to make it not only efficient but easily to adapt to any other APIs and Database systems.
