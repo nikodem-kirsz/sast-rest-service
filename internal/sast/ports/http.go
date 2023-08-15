@@ -20,6 +20,7 @@ func NewHttpServer(app app.Application) HttpServer {
 }
 
 func (h HttpServer) GetSastReports(w http.ResponseWriter, r *http.Request) {
+
 	var appReports []query.Report
 	appReports, err := h.app.Queries.AllReports.Handle(r.Context(), query.AllReports{})
 	if err != nil {

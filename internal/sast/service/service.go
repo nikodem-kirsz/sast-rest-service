@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"os"
+	"time"
 
 	"cloud.google.com/go/firestore"
 	"github.com/nikodem-kirsz/sast-rest-service/internal/sast/adapters"
@@ -15,13 +17,29 @@ import (
 	"gorm.io/driver/mysql"
 )
 
-func NewApplication(ctx context.Context) app.Application {
-	client, err := firestore.NewClient(ctx, os.Getenv("GCP_PROJECT"))
-	if err != nil {
-		panic(err)
-	}
+type MySqlConfig struct {
+	Host     string
+	User     string
+	Password string
+	Port     string
+	Database string
+}
 
-	reportsRepository := adapters.NewReportsFireStoreRepository(client)
+func NewApplication(ctx context.Context) app.Application {
+	var reportsRepository adapters.Repository
+	switch db := os.Getenv("DB"); db {
+	case "FIRESTORE":
+		client, err := firestore.NewClient(ctx, os.Getenv("GCP_PROJECT"))
+		if err != nil {
+			panic(err)
+		}
+		reportsRepository = adapters.NewReportsFireStoreRepository(client)
+	case "MYSQL":
+		mysql := connectToMySQL()
+		reportsRepository = adapters.NewMySQLRepository(mysql)
+	default:
+		panic("No valid database provided, check configuration in .env")
+	}
 
 	logger := logrus.NewEntry(logrus.StandardLogger())
 
@@ -38,27 +56,43 @@ func NewApplication(ctx context.Context) app.Application {
 	}
 }
 
-func NewApplicationWithSQL(ctx context.Context) app.Application {
-	dsn := "root:password@tcp(127.0.0.1:3306)/sast_database?charset=utf8mb4&parseTime=True&loc=Local"
-
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	if err != nil {
-		panic("Failed to connect to database: " + err.Error())
+func connectToMySQL() *gorm.DB {
+	dbConfig := MySqlConfig{
+		Host:     os.Getenv("MYSQL_HOST"),
+		Port:     os.Getenv("MYSQL_PORT"),
+		User:     os.Getenv("MYSQL_USER"),
+		Password: os.Getenv("MYSQL_PASSWORD"),
+		Database: os.Getenv("MYSQL_DATABASE"),
 	}
 
-	reportsRepository := adapters.NewMySQLRepository(db)
+	dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		dbConfig.User, dbConfig.Password, dbConfig.Host, dbConfig.Port, dbConfig.Database,
+	)
+	// dsn := "root:password@tcp(mysql:3306)/sast_database?charset=utf8mb4&parseTime=True&loc=Local"
 
-	logger := logrus.NewEntry(logrus.StandardLogger())
+	maxRetries := 2
+	retryInterval := 5 * time.Second
 
-	return app.Application{
-		Queries: app.Queries{
-			AllReports: query.NewAllReportsHandler(reportsRepository, logger),
-			GetReport:  query.NewGetReportHandler(reportsRepository, logger),
-		},
-		Commands: app.Commands{
-			CreateReport: command.NewCreateReportHandler(reportsRepository, logger),
-			UpdateReport: command.NewUpdateReportHandler(reportsRepository, logger),
-			DeleteReport: command.NewDeleteReportHandler(reportsRepository, logger),
-		},
+	var db *gorm.DB
+	var err error
+
+	// Initially waiting 2 seconds before attempting connection to mysql to let the database set
+	time.Sleep(2 * time.Second)
+	// Perform 2 maximum additional retries while couldn't establish connection(Its enough in this case)
+	for retries := 0; retries < maxRetries; retries++ {
+		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		if err != nil {
+			fmt.Printf("Failed to connect to database (retry %d/%d): %v\n", retries+1, maxRetries, err)
+			time.Sleep(retryInterval)
+			continue
+		}
+		break
 	}
+
+	if db == nil {
+		panic("Failed to connect to database after retries")
+	}
+
+	return db
 }

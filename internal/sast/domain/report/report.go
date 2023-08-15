@@ -6,11 +6,11 @@ import (
 )
 
 type Report struct {
-	uuid          string
-	name          string
-	description   string
-	time          time.Time
-	reportContent string
+	UUID          string
+	Name          string
+	Description   string
+	Time          time.Time
+	ReportContent string
 }
 
 func NewReport(uuid string, name string, description string, time time.Time, reportContent string) (*Report, error) {
@@ -31,11 +31,11 @@ func NewReport(uuid string, name string, description string, time time.Time, rep
 	}
 
 	return &Report{
-		uuid:          uuid,
-		name:          name,
-		description:   description,
-		time:          time,
-		reportContent: reportContent,
+		UUID:          uuid,
+		Name:          name,
+		Description:   description,
+		Time:          time,
+		ReportContent: reportContent,
 	}, nil
 }
 
@@ -51,30 +51,10 @@ func UnmarshalReportFromDatabase(
 		return nil, err
 	}
 
-	re.description = description
-	re.name = name
-	re.time = time
-	re.reportContent = reportContent
+	re.Description = description
+	re.Name = name
+	re.Time = time
+	re.ReportContent = reportContent
 
 	return re, nil
-}
-
-func (r Report) UUID() string {
-	return r.uuid
-}
-
-func (r Report) Name() string {
-	return r.name
-}
-
-func (r Report) Description() string {
-	return r.description
-}
-
-func (r Report) Time() time.Time {
-	return r.time
-}
-
-func (r Report) ReportContent() string {
-	return r.reportContent
 }

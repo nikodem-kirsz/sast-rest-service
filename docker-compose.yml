@@ -19,15 +19,15 @@ services:
     depends_on:
       - mysql
 
-  # firestore:
-  #   build:
-  #     context: docker/firestore-emulator
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - "127.0.0.1:8787:8787"
-  #     - "127.0.0.1:4000:4000"
-  #   restart: unless-stopped
+  firestore:
+    build:
+      context: docker/firestore-emulator
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:8787:8787"
+      - "127.0.0.1:4000:4000"
+    restart: unless-stopped
 
   mysql:
     build:

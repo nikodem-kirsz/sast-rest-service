@@ -58,11 +58,11 @@ func (r ReportsFireStoreRepository) GetReport(ctx context.Context, reportUUID st
 	}
 
 	queryReport := query.Report{
-		UUID:          re.UUID(),
-		Name:          re.Name(),
-		Description:   re.Description(),
-		Time:          re.Time(),
-		ReportContent: re.ReportContent(),
+		UUID:          re.UUID,
+		Name:          re.Name,
+		Description:   re.Description,
+		Time:          re.Time,
+		ReportContent: re.ReportContent,
 	}
 
 	return queryReport, nil
@@ -86,17 +86,17 @@ func (r ReportsFireStoreRepository) UpdateReport(
 ) error {
 	collection := r.reportsCollection()
 	return r.firestoreClient.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
-		return tx.Set(collection.Doc(updatedReport.UUID()), r.marshalReport(updatedReport))
+		return tx.Set(collection.Doc(updatedReport.UUID), r.marshalReport(updatedReport))
 	})
 }
 
 func (r ReportsFireStoreRepository) marshalReport(re *report.Report) ReportModel {
 	reportModel := ReportModel{
-		UUID:          re.UUID(),
-		Name:          re.Name(),
-		Description:   re.Description(),
-		Time:          re.Time(),
-		ReportContent: re.ReportContent(),
+		UUID:          re.UUID,
+		Name:          re.Name,
+		Description:   re.Description,
+		Time:          re.Time,
+		ReportContent: re.ReportContent,
 	}
 
 	return reportModel
@@ -146,11 +146,11 @@ func (r ReportsFireStoreRepository) reportModelsToQuery(iter *firestore.Document
 		}
 
 		queryReport := query.Report{
-			UUID:          tr.UUID(),
-			Name:          tr.Name(),
-			Description:   tr.Description(),
-			Time:          tr.Time(),
-			ReportContent: tr.ReportContent(),
+			UUID:          tr.UUID,
+			Name:          tr.Name,
+			Description:   tr.Description,
+			Time:          tr.Time,
+			ReportContent: tr.ReportContent,
 		}
 
 		reports = append(reports, queryReport)

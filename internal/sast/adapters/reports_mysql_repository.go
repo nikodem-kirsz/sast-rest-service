@@ -33,11 +33,11 @@ func NewMySQLRepository(db *gorm.DB) *MySQLRepository {
 
 func (r MySQLRepository) CreateReport(ctx context.Context, re *report.Report) error {
 	model := mysqlReportModel{
-		UUID:          re.UUID(),
-		Name:          re.Name(),
-		Description:   re.Description(),
-		Time:          re.Time(),
-		ReportContent: re.ReportContent(),
+		UUID:          re.UUID,
+		Name:          re.Name,
+		Description:   re.Description,
+		Time:          re.Time,
+		ReportContent: re.ReportContent,
 	}
 
 	if err := r.db.Create(&model).Error; err != nil {
@@ -74,11 +74,11 @@ func (r MySQLRepository) DeleteReport(ctx context.Context, reportUUID string) er
 
 func (r MySQLRepository) UpdateReport(ctx context.Context, updatedReport *report.Report) error {
 	model := mysqlReportModel{
-		UUID:          updatedReport.UUID(),
-		Name:          updatedReport.Name(),
-		Description:   updatedReport.Description(),
-		Time:          updatedReport.Time(),
-		ReportContent: updatedReport.ReportContent(),
+		UUID:          updatedReport.UUID,
+		Name:          updatedReport.Name,
+		Description:   updatedReport.Description,
+		Time:          updatedReport.Time,
+		ReportContent: updatedReport.ReportContent,
 	}
 
 	if err := r.db.Model(&mysqlReportModel{}).Where("uuid = ?", updatedReport.UUID).Updates(&model).Error; err != nil {
