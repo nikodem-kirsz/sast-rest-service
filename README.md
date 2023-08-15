@@ -102,11 +102,11 @@ ok      github.com/nikodem-kirsz/sast-rest-service/internal/sast/app/query/test 
 ### Open Api generation
 `make openapi_http`
 
-Produces client files to `internal/common/client` and http server configuration and types to `internal/sast/app/ports`
+Produces client files to `internal/common/client` and http server configuration and types to `internal/sast/ports`
 
-[openapi_api.gen.go](internal/sast/app/ports/openapi_api.gen.go) 
+[openapi_api.gen.go](internal/sast/ports/openapi_api.gen.go) 
 
-[openapi_types.gen.go](internal/sast/app/ports/openapi_types.gen.go) 
+[openapi_types.gen.go](internal/sast/ports/openapi_types.gen.go) 
 
 ## General Architecture
 
