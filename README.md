@@ -24,7 +24,10 @@ Application uses this technique for HTTP Server's methods implementation(GET, PO
 - [scripts](scripts/) development scripts
 
 ### Running locally
+Project uses Firestore which is NoSQL database Cloud Storage from Google. To be able to use it a `gcloud` CLI has to be initialized with a `GCP_PROJECT`
+for instance `GCP_PROJECT=sast-rest-service`
 
+Follow steps in [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install)
 ```go
 > docker-compose up
 
