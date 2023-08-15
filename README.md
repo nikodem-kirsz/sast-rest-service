@@ -153,7 +153,10 @@ type Commands struct {
 
 ### Architectural Concepts
 The application purpose is quite straight forward. There is an HTTP exposing REST endpoints that do some manipulation on the database so why the solution seems so deem in complexity.
+
 There are diffrent ways of handling any project with business perspective in mind. It could obviously be done with the less effort focusing only on reaching the primary goal and abstracting database from internal logic. It gives a great boost in terms of a delivery time but then slows down once a further development is needed to acquire much higher objective.
+
 Once considering scalability, maintanance endurance and reliability its great to have it all well organised and created according to for example DDD princpiles it follows on DRY concept too. Even from the perspective of a developer unaware of the project the adaptation time is low and such person can become effective in evolving the project fast due to high readability and intuition standing behind such code.
-So alternative solution would be even omit OpenApi, CQRS and focus primarly on abstracting model in a repository pattern. It would produce less code, simpler data flow and would produce same behaviour in lesser time but would be way more vulnerable for scalling refactoring and scalling. 
+
+Alternative solution would be even omit OpenApi, CQRS and focus primarly on abstracting model in a repository pattern. It would produce less code, simpler data flow and would produce same behaviour in lesser time but would be way more vulnerable for scalling refactoring and scalling. 
 There are trade offs that must be considered before and during the development of any project and in this particural case I wanted to make it not only efficient but easily to adapt to any other APIs and Database systems.
