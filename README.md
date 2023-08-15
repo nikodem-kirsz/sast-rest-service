@@ -83,6 +83,22 @@ sast-rest-service-sast-http-1  | [00] INFO[0000] Starting HTTP server on port:30
 
 Docker deamon has to be running in the background. It exposes HTTP port 3000 for performing requests. 
 
+### Tests
+`make test`
+
+```shell
+?       github.com/nikodem-kirsz/sast-rest-service/internal/sast        [no test files]
+?       github.com/nikodem-kirsz/sast-rest-service/internal/sast/adapters       [no test files]
+?       github.com/nikodem-kirsz/sast-rest-service/internal/sast/app    [no test files]
+?       github.com/nikodem-kirsz/sast-rest-service/internal/sast/app/command    [no test files]
+?       github.com/nikodem-kirsz/sast-rest-service/internal/sast/app/query      [no test files]
+?       github.com/nikodem-kirsz/sast-rest-service/internal/sast/domain/report  [no test files]
+?       github.com/nikodem-kirsz/sast-rest-service/internal/sast/ports  [no test files]
+?       github.com/nikodem-kirsz/sast-rest-service/internal/sast/service        [no test files]
+ok      github.com/nikodem-kirsz/sast-rest-service/internal/sast/app/command/test       0.162s
+ok      github.com/nikodem-kirsz/sast-rest-service/internal/sast/app/query/test 0.214s
+```
+
 ## General Architecture
 
 
