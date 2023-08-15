@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "17b79f83-e9c8-4c6c-afb8-4d53e84144cd",
+		"name": "sast-rest-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "957797"
+	},
+	"item": [
+		{
+			"name": "POST sast report",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"test-report1\",\n    \"description\": \"Initial security report\",\n    \"time\": \"2023-08-14T13:42:22.301Z\",\n    \"reportContent\": \"FFDKFJDKLFJLKDF\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/sast-reports",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"sast-reports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT sast report Copy",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"test-report1\",\n    \"description\": \"Initial security report\",\n    \"time\": \"2023-08-14T13:42:22.301Z\",\n    \"reportContent\": \"FFDKFJDKLFJLKDF\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/sast-reports/3406957b-c6e6-42e9-83a5-8a01f47e7548",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"sast-reports",
+						"3406957b-c6e6-42e9-83a5-8a01f47e7548"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE sast report",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/sast-reports/3406957b-c6e6-42e9-83a5-8a01f47e7548",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"sast-reports",
+						"3406957b-c6e6-42e9-83a5-8a01f47e7548"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET sast report by UUID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"test-report1\",\n    \"description\": \"Initial security report\",\n    \"time\": \"2023-08-14T13:42:22.301Z\",\n    \"reportContent\": \"FFDKFJDKLFJLKDF\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/sast-reports/3406957b-c6e6-42e9-83a5-8a01f47e7548",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"sast-reports",
+						"3406957b-c6e6-42e9-83a5-8a01f47e7548"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET sast reports",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"test-report1\",\n    \"description\": \"Initial security report\",\n    \"time\": \"2023-08-14T13:42:22.301Z\",\n    \"reportContent\": \"FFDKFJDKLFJLKDF\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/sast-reports",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"sast-reports"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
