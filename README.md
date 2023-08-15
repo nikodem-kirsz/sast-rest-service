@@ -99,6 +99,15 @@ ok      github.com/nikodem-kirsz/sast-rest-service/internal/sast/app/command/tes
 ok      github.com/nikodem-kirsz/sast-rest-service/internal/sast/app/query/test 0.214s
 ```
 
+### Open Api generation
+`make openapi_http`
+
+Produces client files to `internal/common/client` and http server configuration and types to `internal/sast/app/ports`
+
+[openapi_api.gen.go](internal/sast/app/ports/openapi_api.gen.go) 
+
+[openapi_types.gen.go](internal/sast/app/ports/openapi_types.gen.go) 
+
 ## General Architecture
 
 
